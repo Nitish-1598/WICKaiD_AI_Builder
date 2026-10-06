@@ -21,13 +21,14 @@ export async function buildPersonalizedCapsuleWardrobe(
   userGarments: GarmentAttributes[],
   occasion: string = 'Versatile Everyday'
 ): Promise<WardrobeAnalysisSession> {
-  // Step 1: Identify style gaps and retrieve complementary catalog items
-  const recommendedCatalogItems = findComplementaryItems(userGarments, 4);
+  // Step 1: Identify style gaps and retrieve complementary catalog items dynamically
+  const recommendedCatalogItems = findComplementaryItems(userGarments);
+  const fullCatalog = getFullCatalog();
 
   // Step 2: Synthesize multi-piece outfit combinations via Gemini Stylist
   const capsuleOutfits = await synthesizeCapsuleOutfits(
     userGarments,
-    recommendedCatalogItems,
+    fullCatalog,
     occasion
   );
 

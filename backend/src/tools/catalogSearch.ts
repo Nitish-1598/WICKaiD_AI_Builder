@@ -99,30 +99,55 @@ export function searchCatalog(
 
 export function findComplementaryItems(
   userGarments: GarmentAttributes[],
-  limit: number = 3
+  limit?: number
 ): CatalogItem[] {
+  const allCategories = ['Outerwear', 'Tops', 'Bottoms', 'Footwear', 'Accessories'] as const;
+  const presentCategories = new Set((userGarments || []).map((g) => g.category));
+  const missingCategories = allCategories.filter((cat) => !presentCategories.has(cat as any));
+
+  // Dynamically determine how many items to recommend when limit is not explicitly provided:
+  // - Matches the actual number of missing wardrobe gaps (between 2 and 4 items)
+  // - If closet already covers all categories, recommends 3 versatile rotational pieces
+  const dynamicLimit = missingCategories.length > 0
+    ? Math.min(4, Math.max(2, missingCategories.length))
+    : 3;
+
+  const targetLimit = typeof limit === 'number' && limit > 0 ? limit : dynamicLimit;
+
   if (!userGarments || userGarments.length === 0) {
-    return catalog.slice(0, limit);
+    return catalog.slice(0, targetLimit);
   }
 
-  const presentCategories = new Set(userGarments.map((g) => g.category));
   const avgFormality =
     userGarments.reduce((acc, g) => acc + g.formality, 0) / userGarments.length;
 
-  // Prioritize categories missing from the user's closet
-  const missingCategoryItems = catalog.filter(
-    (item) => !presentCategories.has(item.category as any)
-  );
+  const picked: CatalogItem[] = [];
+  const pickedIds = new Set<string>();
 
-  const candidates = missingCategoryItems.length > 0 ? missingCategoryItems : catalog;
+  // Pick 1 best matching item for each missing category first
+  for (const cat of missingCategories) {
+    if (picked.length >= targetLimit) break;
+    const catItems = catalog.filter((i) => i.category === cat);
+    if (catItems.length > 0) {
+      catItems.sort(
+        (a, b) => Math.abs(a.formality - avgFormality) - Math.abs(b.formality - avgFormality)
+      );
+      picked.push(catItems[0]);
+      pickedIds.add(catItems[0].id);
+    }
+  }
 
-  const scoredItems = candidates.map((item) => {
-    const formalityDiff = Math.abs(item.formality - avgFormality);
-    return { item, score: formalityDiff };
-  });
+  // Fill remaining slots if targetLimit is not reached
+  if (picked.length < targetLimit) {
+    const remaining = catalog
+      .filter((i) => !pickedIds.has(i.id))
+      .sort(
+        (a, b) => Math.abs(a.formality - avgFormality) - Math.abs(b.formality - avgFormality)
+      );
+    picked.push(...remaining.slice(0, targetLimit - picked.length));
+  }
 
-  scoredItems.sort((a, b) => a.score - b.score);
-  return scoredItems.slice(0, limit).map((s) => s.item);
+  return picked;
 }
 
 export function calculateWardrobeAnalytics(
