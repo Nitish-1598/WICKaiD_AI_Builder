@@ -10,6 +10,8 @@ import { StylistChatDrawer } from './components/StylistChatDrawer';
 import { CatalogExplorerModal } from './components/CatalogExplorerModal';
 import { WardrobeAnalytics } from './components/WardrobeAnalytics';
 import { LookbookExportModal } from './components/LookbookExportModal';
+import { MerchantDashboard } from './components/MerchantDashboard';
+import { GcpTelemetryModal } from './components/GcpTelemetryModal';
 import {
   Sparkles,
   Wand2,
@@ -58,7 +60,9 @@ export function App() {
   const [analytics, setAnalytics] = useState<any>(null);
   const [versatilityScore, setVersatilityScore] = useState(0);
 
-  // Modals
+  // Modals & Navigation
+  const [currentMode, setCurrentMode] = useState<'shopper' | 'merchant'>('shopper');
+  const [isGcpTelemetryOpen, setIsGcpTelemetryOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
@@ -214,6 +218,9 @@ export function App() {
     <div className="min-h-screen bg-radial-luxury flex flex-col selection:bg-rose-500 selection:text-white">
       {/* Top Navbar */}
       <Navbar
+        currentMode={currentMode}
+        onToggleMode={setCurrentMode}
+        onOpenGcpTelemetry={() => setIsGcpTelemetryOpen(true)}
         cartCount={cartItems.length}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenChat={() => setIsChatOpen(true)}
@@ -225,8 +232,12 @@ export function App() {
         closetCount={userGarments.length}
       />
 
-      {/* Main Body Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 md:px-8 py-8 space-y-12">
+      {/* Conditional View: Merchant Operations vs Shopper Studio */}
+      {currentMode === 'merchant' ? (
+        <MerchantDashboard onOpenGcpTelemetry={() => setIsGcpTelemetryOpen(true)} />
+      ) : (
+        /* Main Body Content */
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 md:px-8 py-8 space-y-12">
         
         {/* Editorial Hero Banner */}
         <section className="text-center space-y-4 pt-4">
@@ -383,28 +394,37 @@ export function App() {
         )}
 
       </main>
+      )}
 
-      {/* Floating Aura AI Stylist Bubble */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={() => setIsChatOpen(true)}
-          className="flex items-center space-x-2.5 px-4 py-3 rounded-full btn-luxury-primary text-white shadow-2xl shadow-rose-950/70 hover:scale-105 transition-all group border border-rose-400/30"
-        >
-          <div className="relative">
-            <MessageSquare className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
-          </div>
-          <span className="text-xs font-bold tracking-wide">Ask Aura Stylist</span>
-        </button>
-      </div>
+      {/* Floating Aura AI Stylist Bubble (only in shopper mode) */}
+      {currentMode === 'shopper' && (
+        <div className="fixed bottom-6 right-6 z-40">
+          <button
+            onClick={() => setIsChatOpen(true)}
+            className="flex items-center space-x-2.5 px-4 py-3 rounded-full btn-luxury-primary text-white shadow-2xl shadow-rose-950/70 hover:scale-105 transition-all group border border-rose-400/30"
+          >
+            <div className="relative">
+              <MessageSquare className="h-5 w-5" />
+              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+            </div>
+            <span className="text-xs font-bold tracking-wide">Ask Aura Stylist</span>
+          </button>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="w-full glass-panel-luxury border-t border-rose-950/40 py-5 text-center text-xs text-slate-500 space-y-1">
-        <div>Google Cloud AI Builder Cup 2026 • Multimodal Capsule Wardrobe Architecture</div>
+        <div>Google Cloud AI Builder Cup 2026 • Retail & Commerce Unified Platform</div>
         <div className="text-[11px] text-slate-600">
-          Powered by Gemini 3.5 Multimodal Vision, Imagen 3 Editorial Synthesis & Google Cloud Platform
+          Powered by Gemini 3.5 Multimodal Vision, Imagen 3 Synthesis, Google BigQuery AI & Google Cloud Platform
         </div>
       </footer>
+
+      {/* Google Cloud Platform Telemetry Modal */}
+      <GcpTelemetryModal
+        isOpen={isGcpTelemetryOpen}
+        onClose={() => setIsGcpTelemetryOpen(false)}
+      />
 
       {/* Shoppable Cart Slide-out Drawer */}
       <CheckoutDrawer

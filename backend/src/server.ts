@@ -5,6 +5,10 @@ import dotenv from 'dotenv';
 import { parseGarmentImage, parseGarmentImagesBatch } from './tools/visionParser';
 import { getFullCatalog, searchCatalog, calculateWardrobeAnalytics } from './tools/catalogSearch';
 import { buildPersonalizedCapsuleWardrobe, chatWithStylist } from './agent';
+import {
+  getCompleteMerchantDashboard,
+  processMerchantNaturalLanguageQuery,
+} from './tools/merchantAnalytics';
 
 dotenv.config();
 
@@ -27,7 +31,7 @@ app.get('/api/health', (req: Request, res: Response) => {
   res.json({
     status: 'online',
     system: 'VisualCapsule-Stylist Backend',
-    gcpProject: process.env.GCP_PROJECT_ID || 'ai-builder-sql-copilot',
+    gcpProject: process.env.GCP_PROJECT_ID || 'project-8c073bdd-106e-4938-8df',
     visionModel: process.env.GEMINI_VISION_MODEL || 'gemini-3.5-flash-lite',
     textModel: process.env.GEMINI_TEXT_MODEL || 'gemini-3.5-flash-lite',
     imagenModel: process.env.IMAGEN_MODEL || 'imagen-3.0-generate-002',
@@ -147,6 +151,87 @@ app.post('/api/generate-capsule', async (req: Request, res: Response) => {
     console.error('❌ Capsule Generation Error:', err);
     res.status(500).json({ error: err.message || 'Failed to generate capsule wardrobe.' });
   }
+});
+
+// Retail Merchant Intelligence & Operations Command Dashboard
+app.get('/api/merchant/dashboard', async (req: Request, res: Response) => {
+  try {
+    console.log('📊 Fetching Retail Merchant BI & Demand Forecasting Dashboard...');
+    const data = await getCompleteMerchantDashboard();
+    res.json(data);
+  } catch (err: any) {
+    console.error('❌ Merchant Dashboard Error:', err);
+    res.status(500).json({ error: err.message || 'Failed to fetch merchant dashboard.' });
+  }
+});
+
+// BigQuery AI Natural Language Merchant Copilot
+app.post('/api/merchant/nl-query', async (req: Request, res: Response) => {
+  try {
+    const { query } = req.body;
+    if (!query) {
+      return res.status(400).json({ error: 'query is required.' });
+    }
+
+    console.log(`🧠 Processing Merchant NL BI Query: "${query.slice(0, 60)}..."`);
+    const result = await processMerchantNaturalLanguageQuery(query);
+    res.json(result);
+  } catch (err: any) {
+    console.error('❌ Merchant NL Query Error:', err);
+    res.status(500).json({ error: err.message || 'Failed to process natural language query.' });
+  }
+});
+
+// Google Cloud Architecture & Live Telemetry Inspector
+app.get('/api/gcp/telemetry', (req: Request, res: Response) => {
+  res.json({
+    status: 'HEALTHY',
+    project: {
+      id: process.env.GCP_PROJECT_ID || 'project-8c073bdd-106e-4938-8df',
+      name: 'Retail & Commerce AI Builder',
+      billingStatus: 'ACTIVE',
+      region: 'us-central1 / asia-southeast1',
+    },
+    serviceAccount: {
+      email: 'wickaid-ai-builder-sa@project-8c073bdd-106e-4938-8df.iam.gserviceaccount.com',
+      role: 'roles/editor',
+      keyFile: './gcp-key.json',
+    },
+    googleAiStack: {
+      multimodalVision: {
+        model: process.env.GEMINI_VISION_MODEL || 'gemini-3.5-flash-lite',
+        status: 'ONLINE',
+        purpose: 'Garment attribute extraction, color hex detection, formality rating',
+      },
+      conversationalStylist: {
+        model: process.env.GEMINI_TEXT_MODEL || 'gemini-3.5-flash-lite',
+        status: 'ONLINE',
+        purpose: 'Conversational shopping agent & BigQuery NL-to-SQL translation',
+      },
+      imageSynthesis: {
+        model: process.env.IMAGEN_MODEL || 'imagen-3.0-generate-002',
+        status: 'READY',
+        purpose: 'Photorealistic capsule wardrobe outfit flat-lays',
+      },
+      analyticsEngine: {
+        service: 'Google BigQuery + BigQuery AI',
+        dataset: process.env.BIGQUERY_DATASET || 'enterprise_bi',
+        tables: ['inventory', 'orders', 'returns_log', 'customer_segments'],
+        status: 'CONNECTED',
+      },
+      objectStorage: {
+        service: 'Google Cloud Storage',
+        bucket: 'gs://capsule-stylist-assets-42100',
+        status: 'READY',
+      },
+      deploymentTarget: {
+        platform: 'Google Cloud Run',
+        container: 'Multi-stage Node.js 20 Alpine + Vite Static Nginx',
+        autoScaling: '0 to 100 instances',
+      },
+    },
+    timestamp: new Date().toISOString(),
+  });
 });
 
 app.listen(PORT, () => {

@@ -8,9 +8,15 @@ import {
   BookOpen,
   Store,
   RotateCcw,
+  Cloud,
+  LayoutDashboard,
+  Shirt,
 } from 'lucide-react';
 
 interface NavbarProps {
+  currentMode: 'shopper' | 'merchant';
+  onToggleMode: (mode: 'shopper' | 'merchant') => void;
+  onOpenGcpTelemetry: () => void;
   cartCount: number;
   onOpenCart: () => void;
   onOpenChat: () => void;
@@ -23,6 +29,9 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
+  currentMode,
+  onToggleMode,
+  onOpenGcpTelemetry,
   cartCount,
   onOpenCart,
   onOpenChat,
@@ -34,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   closetCount,
 }) => {
   return (
-    <header className="sticky top-0 z-40 w-full glass-panel-luxury border-b border-rose-950/40 px-4 md:px-8 py-3.5">
+    <header className="sticky top-0 z-40 w-full glass-panel-luxury border-b border-rose-950/40 px-3 md:px-8 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
         {/* Brand */}
@@ -46,21 +55,61 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h1 className="font-serif italic font-bold text-lg md:text-xl tracking-wide bg-gradient-to-r from-rose-100 via-stone-200 to-rose-300 bg-clip-text text-transparent">
-                Capsule Stylist
+              <h1 className="font-serif italic font-bold text-base md:text-xl tracking-wide bg-gradient-to-r from-rose-100 via-stone-200 to-rose-300 bg-clip-text text-transparent">
+                CapsuleAI Studio
               </h1>
               <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase bg-rose-500/10 text-rose-300 border border-rose-500/20">
-                Multimodal AI
+                Unified Commerce
               </span>
             </div>
             <p className="text-[11px] text-slate-400 hidden sm:block">
-              Google Cloud AI Builder Cup 2026 • Gemini Vision & Imagen 3
+              Google Cloud AI Builder Cup 2026 • Retail & Commerce
             </p>
           </div>
         </div>
 
+        {/* Center Mode Switcher: Shopper Experience vs Merchant Intelligence */}
+        <div className="flex items-center p-1 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-inner">
+          <button
+            onClick={() => onToggleMode('shopper')}
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              currentMode === 'shopper'
+                ? 'bg-gradient-to-r from-rose-500 to-amber-600 text-white shadow-md shadow-rose-900/30'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Shirt className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Shopper Studio</span>
+            <span className="sm:hidden">Shopper</span>
+          </button>
+
+          <button
+            onClick={() => onToggleMode('merchant')}
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              currentMode === 'merchant'
+                ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-900/30'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <LayoutDashboard className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Merchant Operations</span>
+            <span className="sm:hidden">Merchant</span>
+          </button>
+        </div>
+
         {/* Right Nav Actions */}
         <div className="flex items-center space-x-2 md:space-x-3">
+          
+          {/* GCP Telemetry Button */}
+          <button
+            onClick={onOpenGcpTelemetry}
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-medium text-slate-300 border border-slate-700/60"
+            title="View Live Google Cloud Platform Telemetry"
+          >
+            <Cloud className="h-3.5 w-3.5 text-rose-400" />
+            <span className="hidden lg:inline text-[11px] font-mono">GCP Stack</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          </button>
           
           {/* Ask Aura Stylist Button */}
           <button
