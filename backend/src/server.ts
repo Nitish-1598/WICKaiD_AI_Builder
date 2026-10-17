@@ -234,9 +234,36 @@ app.get('/api/gcp/telemetry', (req: Request, res: Response) => {
   });
 });
 
+// Serve Frontend Static Assets in Production
+import path from 'path';
+import fs from 'fs';
+
+const possibleDistPaths = [
+  path.resolve(process.cwd(), 'public'),
+  path.resolve(__dirname, '../public'),
+  path.resolve(__dirname, 'public'),
+  path.resolve(__dirname, '../../frontend/dist'),
+  path.resolve(__dirname, '../frontend/dist'),
+  path.resolve(process.cwd(), 'frontend/dist'),
+];
+
+for (const distPath of possibleDistPaths) {
+  if (fs.existsSync(distPath)) {
+    console.log(`📦 Serving static frontend UI from ${distPath}`);
+    app.use(express.static(distPath));
+    app.get('*', (req: Request, res: Response) => {
+      if (!req.path.startsWith('/api')) {
+        res.sendFile(path.join(distPath, 'index.html'));
+      }
+    });
+    break;
+  }
+}
+
 app.listen(PORT, () => {
   console.log(`🚀 VisualCapsule-Stylist Server running on http://localhost:${PORT}`);
   console.log(`👁️ Vision Model: ${process.env.GEMINI_VISION_MODEL || 'gemini-3.5-flash-lite'}`);
   console.log(`💬 Text Model: ${process.env.GEMINI_TEXT_MODEL || 'gemini-3.5-flash-lite'}`);
   console.log(`🎨 Imagen Model: ${process.env.IMAGEN_MODEL || 'imagen-3.0-generate-002'}`);
 });
+
