@@ -1,11 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Sparkles, Wand2, User, Loader2, ShoppingBag, ArrowRight } from 'lucide-react';
+import { X, Send, Sparkles, Wand2, User, Loader2, ShoppingBag, ArrowRight, Globe, Cpu, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
+
+interface GroundingSource {
+  title: string;
+  url: string;
+  snippet?: string;
+}
+
+interface AgentAction {
+  tool: string;
+  input?: any;
+  output: string;
+}
 
 interface Message {
   role: 'user' | 'model';
   text: string;
   recommendedItemIds?: string[];
+  groundingSources?: GroundingSource[];
+  agentActions?: AgentAction[];
+  modelUsed?: string;
 }
 
 interface StylistChatDrawerProps {
@@ -23,6 +38,51 @@ const QUICK_PROMPTS = [
   'Give me a rainy day outfit formula.',
   'How do I dress up sneakers for a stylish dinner?',
 ];
+
+const renderFormattedMessage = (content: string) => {
+  if (!content) return null;
+  const lines = content.split('\n');
+
+  return lines.map((line, lineIdx) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      return <div key={lineIdx} className="h-1.5" />;
+    }
+
+    const isBullet = trimmed.startsWith('•') || trimmed.startsWith('- ') || trimmed.startsWith('* ');
+    const rawContent = isBullet ? trimmed.replace(/^[•\-\*]\s*/, '') : line;
+
+    // Parse **bold text** into <strong> elements
+    const parts = rawContent.split(/(\*\*[^*]+?\*\*)/g);
+    const parsedLine = parts.map((part, partIdx) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        const cleanText = part.slice(2, -2).replace(/\*\*/g, '');
+        return (
+          <strong key={partIdx} className="font-semibold text-white">
+            {cleanText}
+          </strong>
+        );
+      }
+      // Strip any stray dangling asterisks
+      return part.replace(/\*\*/g, '');
+    });
+
+    if (isBullet) {
+      return (
+        <div key={lineIdx} className="flex items-start space-x-2 my-1 pl-1">
+          <span className="text-rose-400 font-bold shrink-0 leading-relaxed">•</span>
+          <span className="leading-relaxed">{parsedLine}</span>
+        </div>
+      );
+    }
+
+    return (
+      <p key={lineIdx} className="leading-relaxed">
+        {parsedLine}
+      </p>
+    );
+  });
+};
 
 export const StylistChatDrawer: React.FC<StylistChatDrawerProps> = ({
   isOpen,
@@ -85,6 +145,9 @@ export const StylistChatDrawer: React.FC<StylistChatDrawerProps> = ({
         role: 'model',
         text: res.data.reply,
         recommendedItemIds: res.data.recommendedItemIds || [],
+        groundingSources: res.data.groundingSources || [],
+        agentActions: res.data.agentActions || [],
+        modelUsed: res.data.modelUsed,
       };
       setMessages((prev) => [...prev, replyMsg]);
     } catch (err) {
@@ -118,12 +181,13 @@ export const StylistChatDrawer: React.FC<StylistChatDrawerProps> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <h3 className="font-serif font-bold text-white text-base">Aura AI Stylist</h3>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-rose-500/10 text-rose-300 border border-rose-500/20">
-                  Gemini 3.5
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Grounded Agent
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
-                {userGarments.length} closet pieces in context • Occasion: {occasion}
+                {userGarments.length} closet pieces • Google Search Grounding Active
               </p>
             </div>
           </div>
@@ -160,10 +224,50 @@ export const StylistChatDrawer: React.FC<StylistChatDrawerProps> = ({
                     className={`rounded-2xl p-4 text-xs md:text-sm leading-relaxed ${
                       isUser
                         ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white rounded-tr-none shadow-md shadow-rose-900/40'
-                        : 'glass-panel-card text-slate-200 border border-slate-800/90 rounded-tl-none space-y-2'
+                        : 'glass-panel-card text-slate-200 border border-slate-800/90 rounded-tl-none space-y-3'
                     }`}
                   >
-                    <div className="whitespace-pre-line">{msg.text}</div>
+                    {/* Agent Tool Executions Pill */}
+                    {!isUser && msg.agentActions && msg.agentActions.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pb-2 border-b border-slate-800/60">
+                        {msg.agentActions.map((act, actIdx) => (
+                          <span
+                            key={actIdx}
+                            className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-indigo-950/80 border border-indigo-700/50 text-[10px] text-indigo-300 font-mono"
+                          >
+                            <Cpu className="h-2.5 w-2.5 text-indigo-400" />
+                            <span className="font-semibold">{act.tool}:</span>
+                            <span className="text-slate-300">{act.output}</span>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="space-y-1 text-xs md:text-sm">{renderFormattedMessage(msg.text)}</div>
+
+                    {/* Google Search Grounding Sources */}
+                    {!isUser && msg.groundingSources && msg.groundingSources.length > 0 && (
+                      <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
+                        <div className="flex items-center space-x-1.5 text-[10px] font-bold text-emerald-400">
+                          <Globe className="h-3 w-3 text-emerald-400" />
+                          <span>Grounded in Live Fashion Search Intelligence:</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {msg.groundingSources.map((src, srcIdx) => (
+                            <a
+                              key={srcIdx}
+                              href={src.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-800/60 text-[10px] text-emerald-300 hover:text-white hover:bg-emerald-900 transition-colors max-w-[240px] truncate"
+                            >
+                              <CheckCircle2 className="h-2.5 w-2.5 text-emerald-400 shrink-0" />
+                              <span className="truncate">{src.title}</span>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {isUser && (

@@ -34,26 +34,30 @@ const HIGH_RES_EDITORIAL_PREVIEWS = [
  * If quota-limited or unavailable, returns high-res editorial preview.
  */
 async function generateImagenFlatlay(prompt: string, fallbackIndex: number): Promise<string> {
-  const imagenEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+  const modelName = process.env.IMAGEN_MODEL || 'imagen-3.0-generate-002';
+  const imagenEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:predict?key=${apiKey}`;
   
   try {
-    const res = await fetch(imagenEndpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        instances: [{ prompt }],
-        parameters: { sampleCount: 1, aspectRatio: '1:1', outputMimeType: 'image/jpeg' },
-      }),
-    });
+    if (apiKey) {
+      const res = await fetch(imagenEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          instances: [{ prompt }],
+          parameters: { sampleCount: 1, aspectRatio: '1:1', outputMimeType: 'image/jpeg' },
+        }),
+      });
 
-    if (res.ok) {
-      const data = (await res.json()) as any;
-      if (data.predictions && data.predictions[0]?.bytesBase64Encoded) {
-        return `data:image/jpeg;base64,${data.predictions[0].bytesBase64Encoded}`;
+      if (res.ok) {
+        const data = (await res.json()) as any;
+        if (data.predictions && data.predictions[0]?.bytesBase64Encoded) {
+          console.log(`✨ Photorealistic outfit flat-lay generated via Google ${modelName}`);
+          return `data:image/jpeg;base64,${data.predictions[0].bytesBase64Encoded}`;
+        }
       }
     }
-  } catch (err) {
-    // Graceful fallback to high-res editorial photography
+  } catch (err: any) {
+    console.warn(`ℹ️ Imagen 3 API notice (${err.message || 'quota'}). Using curated Scandinavian editorial preview.`);
   }
 
   return HIGH_RES_EDITORIAL_PREVIEWS[fallbackIndex % HIGH_RES_EDITORIAL_PREVIEWS.length];

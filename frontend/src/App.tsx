@@ -367,6 +367,7 @@ export function App() {
               allClosetItems={userGarments}
               allCatalogItems={allCatalog}
               onUpdateOutfit={handleUpdateOutfit}
+              onOpenLookbook={() => setIsLookbookOpen(true)}
             />
           </section>
         )}
