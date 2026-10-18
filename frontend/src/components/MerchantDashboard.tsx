@@ -90,10 +90,11 @@ export const MerchantDashboard: React.FC<MerchantDashboardProps> = ({ onOpenGcpT
   };
 
   const sampleQuestions = [
+    'Top 5 trending colors with lowest return rate',
+    'Deadstock items matching >70% of active user closets',
+    'Customer segments at risk of seasonal churn',
     'Which outerwear item has the highest stockout risk this month?',
-    'Show me revenue by category and identify growth opportunities',
     'Simulate demand if we promote the Camel Merino Wool Coat',
-    'Which customer segment has the lowest return rate and highest cross-sell affinity?',
   ];
 
   return (

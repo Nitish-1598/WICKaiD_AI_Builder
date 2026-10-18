@@ -8,6 +8,9 @@
 [![Imagen 3](https://img.shields.io/badge/Imagen%203-Studio%20Synthesis-EA4335)](https://cloud.google.com/vertex-ai/generative-ai/docs/image/overview)
 [![BigQuery AI](https://img.shields.io/badge/BigQuery%20AI-Data%20Warehouse-34A853?logo=google-bigquery&logoColor=white)](https://cloud.google.com/bigquery)
 [![Cloud Run](https://img.shields.io/badge/Cloud%20Run-Serverless%20Containers-009688)](https://cloud.google.com/run)
+[![Live Sandbox](https://img.shields.io/badge/Live%20Demo-Cloud%20Run-34A853?logo=google-cloud&logoColor=white)](https://visual-capsule-stylist-205781654913.us-central1.run.app)
+
+> **Live Working Application**: [https://visual-capsule-stylist-205781654913.us-central1.run.app](https://visual-capsule-stylist-205781654913.us-central1.run.app)
 
 ---
 
