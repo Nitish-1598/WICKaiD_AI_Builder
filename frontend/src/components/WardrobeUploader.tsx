@@ -100,7 +100,7 @@ const SAMPLE_WARDROBE_PRESETS = [
     formality: 5,
     fabric: '13.5oz Shuttle-Loom Denim',
     description: 'Selvedge denim with classic straight leg cut and clean chainstitch hem.',
-    imageUrl: 'https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=600&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&q=80',
     recommendedPairings: ['White Oversized Shirt', 'White Sneakers', 'Camel Overcoat'],
   },
   {
