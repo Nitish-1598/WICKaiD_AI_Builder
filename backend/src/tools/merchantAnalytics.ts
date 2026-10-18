@@ -209,6 +209,26 @@ export function getMarketBasketAffinities(): BasketAffinity[] {
       liftRatio: 2.51,
       aovImpact: 245.00,
     },
+    {
+      primaryItem: 'Italian Reversible Silk-Wool Trench Coat',
+      pairedItem: 'Lustrous Mulberry Silk Camp-Collar Shirt',
+      categoryPair: 'Outerwear + Tops',
+      coOccurrenceCount: 298,
+      supportPct: 19.8,
+      confidencePct: 84.6,
+      liftRatio: 3.65,
+      aovImpact: 380.00,
+    },
+    {
+      primaryItem: 'Wide-Leg Tencel Lyocell Pleated Slacks',
+      pairedItem: 'Chunky Lug-Sole Polished Leather Derby Shoes',
+      categoryPair: 'Bottoms + Footwear',
+      coOccurrenceCount: 274,
+      supportPct: 18.2,
+      confidencePct: 78.9,
+      liftRatio: 3.18,
+      aovImpact: 275.00,
+    },
   ];
 }
 
