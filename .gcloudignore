@@ -10,3 +10,7 @@ dist/
 */dist/
 .DS_Store
 Thumbs.db
+*.mp4
+*.pptx
+demo_production/
+ppt/

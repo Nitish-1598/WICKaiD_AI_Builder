@@ -178,5 +178,126 @@
     "formality": 8,
     "imageUrl": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80",
     "description": "Sapphire crystal Japanese quartz movement watch with mesh steel strap."
+  },
+  {
+    "id": "CAT-016",
+    "name": "Italian Reversible Silk-Wool Trench Coat",
+    "category": "Outerwear",
+    "price": 285.00,
+    "color": "Sand Beige",
+    "colorHex": "#D2B48C",
+    "styleArchetype": "Quiet Luxury",
+    "formality": 8,
+    "imageUrl": "https://images.unsplash.com/photo-1548624149-f9b1859aa9d0?auto=format&fit=crop&w=600&q=80",
+    "description": "Reversible double-faced silk-wool trench with storm flap and horn buckles."
+  },
+  {
+    "id": "CAT-017",
+    "name": "Merino Wool Ribbed Polo Cardigan",
+    "category": "Tops",
+    "price": 85.00,
+    "color": "French Navy",
+    "colorHex": "#000080",
+    "styleArchetype": "Smart Casual",
+    "formality": 6,
+    "imageUrl": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=600&q=80",
+    "description": "Fine-gauge extrafine merino wool knit polo cardigan with mother-of-pearl buttons."
+  },
+  {
+    "id": "CAT-018",
+    "name": "Relaxed Tailored Linen Drawstring Trousers",
+    "category": "Bottoms",
+    "price": 90.00,
+    "color": "Oatmeal Sand",
+    "colorHex": "#E3DAC9",
+    "styleArchetype": "Summer Minimalist",
+    "formality": 6,
+    "imageUrl": "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?auto=format&fit=crop&w=600&q=80",
+    "description": "Breathable European flax linen slacks with elasticated waistband and single front pleat."
+  },
+  {
+    "id": "CAT-019",
+    "name": "Handcrafted Suede Driving Moccasins",
+    "category": "Footwear",
+    "price": 145.00,
+    "color": "Chestnut Tan",
+    "colorHex": "#986960",
+    "styleArchetype": "Riviera Casual",
+    "formality": 6,
+    "imageUrl": "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=600&q=80",
+    "description": "Supple calf suede driving loafers with pebbled rubber traction nubs."
+  },
+  {
+    "id": "CAT-020",
+    "name": "Woven Raffia Summer Market Tote",
+    "category": "Accessories",
+    "price": 75.00,
+    "color": "Natural Straw",
+    "colorHex": "#E6C280",
+    "styleArchetype": "Resort Chic",
+    "formality": 5,
+    "imageUrl": "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80",
+    "description": "Handwoven Madagascar raffia carryall tote with vegetable-tanned bridle leather handles."
+  },
+  {
+    "id": "CAT-021",
+    "name": "Double-Faced Cashmere Belted Wrap Coat",
+    "category": "Outerwear",
+    "price": 320.00,
+    "color": "Dove Grey",
+    "colorHex": "#8B8589",
+    "styleArchetype": "Quiet Luxury",
+    "formality": 9,
+    "imageUrl": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=600&q=80",
+    "description": "Unlined hand-stitched double-faced cashmere wrap coat with fluid draped collar."
+  },
+  {
+    "id": "CAT-022",
+    "name": "Lustrous Mulberry Silk Camp-Collar Shirt",
+    "category": "Tops",
+    "price": 95.00,
+    "color": "Sage Green",
+    "colorHex": "#87A96B",
+    "styleArchetype": "Contemporary Chic",
+    "formality": 7,
+    "imageUrl": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80",
+    "description": "19mm sandwashed mulberry silk button-down shirt with Cuban camp collar and vented hem."
+  },
+  {
+    "id": "CAT-023",
+    "name": "Wide-Leg Tencel Lyocell Pleated Slacks",
+    "category": "Bottoms",
+    "price": 105.00,
+    "color": "Jet Black",
+    "colorHex": "#1B1B1B",
+    "styleArchetype": "Executive Minimalist",
+    "formality": 8,
+    "imageUrl": "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=600&q=80",
+    "description": "High-waisted fluid drape trousers with deep double pleats and concealed button tab."
+  },
+  {
+    "id": "CAT-024",
+    "name": "Chunky Lug-Sole Polished Leather Derby Shoes",
+    "category": "Footwear",
+    "price": 170.00,
+    "color": "Gloss Black",
+    "colorHex": "#0A0A0A",
+    "styleArchetype": "Clean Streetwear",
+    "formality": 7,
+    "imageUrl": "https://images.unsplash.com/photo-1512990414788-d97cb4a25db3?auto=format&fit=crop&w=600&q=80",
+    "description": "High-shine spazzolato leather derby shoes on lightweight EVA commando lug tread."
+  },
+  {
+    "id": "CAT-025",
+    "name": "Sculptural Brushed Brass Curb Chain Necklace",
+    "category": "Accessories",
+    "price": 60.00,
+    "color": "Antique Brass",
+    "colorHex": "#C5A059",
+    "styleArchetype": "Modern Statement",
+    "formality": 7,
+    "imageUrl": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80",
+    "description": "Solid recycled brass curb-link collar necklace with artisan brushed satin finish."
   }
 ]
+
